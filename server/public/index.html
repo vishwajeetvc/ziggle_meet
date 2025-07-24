@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Call</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .main-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      background: black;
+    }
+
+    .self-video {
+      position: fixed;
+      width: 200px;
+      height: 150px;
+      bottom: 20px;
+      right: 20px;
+      border: 2px solid white;
+      border-radius: 8px;
+      object-fit: cover;
+      z-index: 10;
+    }
+
+    .controls {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 20;
+    }
+
+    input, button {
+      padding: 8px;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="controls">
+    <input type="text" placeholder="Meeting Link">
+    <button class="cm">Create Meeting</button>
+    <button class="jm">Join Meeting</button>
+    <button class="stopVideo">Stop/Start Video</button>
+    <button class="stopAudio">Stop/Start Audio</button>
+    <button class="screenShare">Share Screen </button>
+    <button class="data">Say Hi</button>
+      <div style="">
+        <input class="message" type="text" placeholder="Enter you message"> 
+        <button class="send">Send</button>
+      </div>
+  </div>
+
+  <video class="main-video" autoplay playsinline></video>
+  <video class="self-video" autoplay playsinline></video>
+
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./script.js" type="module"></script>
+</body>
+</html>
