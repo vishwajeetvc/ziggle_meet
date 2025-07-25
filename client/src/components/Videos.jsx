@@ -1,6 +1,15 @@
+import { useRef } from "react"
 import { call } from "../assets/assets"
+import { useEffect } from "react";
+import { MicOff } from "lucide-react";
 
-export default function Videos({myVideo, otherVideo, isVideoAvailable, showChat}){
+export default function Videos({myVideo, otherVideo, isVideoAvailable, showMute}){
+
+  const muteRef = useRef(null);
+
+  useEffect(()=>{
+      muteRef.current.hidden = showMute;
+  },[showMute])
 
   return <div className=" inset-0 absolute">
 
@@ -20,14 +29,17 @@ export default function Videos({myVideo, otherVideo, isVideoAvailable, showChat}
 
     <div>
       <div style={{ backgroundImage : `url(${call})`}}
-        className="absolute inset-0 md:bg-cover bg-[center_center] bg-no-repeat bg-size-[700px] z-0"></div>,
+        className="absolute inset-0 md:bg-cover bg-[center_center] bg-no-repeat bg-size-[700px] z-0"></div>
       <div className="absolute top-[50%] left-[50%] translate-x-[-10px_-10px]">
-        <div className="w-5 h-5 border-cyan-400 border top-0 absolute animate-ping rounded-full"></div>,
+        <div className="w-5 h-5 border-cyan-400 border top-0 absolute animate-ping rounded-full"></div>
         <div className="w-5 h-5 bg-cyan-200 top-0 absolute rounded-full"></div>
         <div className="w-[100px] h-[100px] rounded-full border-dashed border-[25px] animate-spin absolute top-[-42px] left-[-40px]"></div>
-        <div className="w-[200px] h-[200px] rounded-full border-dashed border-[1px] animate-ping absolute top-[-92px] left-[-90px]"></div>
+        <div className="w-[200px] h-[200px] rounded-full border-dashed border-[1px] animate-ping absolute top-[-92px] left-[-90px] "></div>
         <div className="w-[300px] h-[300px] rounded-full border-dashed border-blue-400 border-[1px] animate-ping absolute top-[-142px] left-[-140px]"></div>
       </div>
-    </div>
+      <div className="w-[400px] h-[400px] rounded-full border-dashed border-blue-400 border-[1px] animate-ping absolute top-[-142px] left-[-140px]"></div>
+      <div className="w-[400px] h-[400px] rounded-full border-dashed border-blue-400 border-[1px] animate-ping absolute bottom-[-142px] left-[-140px]"></div>
+      <div  ref={muteRef} className="w-[20px] z-1000 h-[20px] absolute text-cyan-600 p-[50px] animate-pulse top-0 "><MicOff size={48}/></div> 
+    </div> 
   </div>
 }

@@ -18,8 +18,8 @@ export default function AllButtons({setIsScreenShare, isScreenShare, lc, localSt
     <div className={`absolute bottom-[20px]  justify-center md:justify-end md:px-5 gap-2 md:gap-4 z-10 flex w-full flex-wrap-reverse md:flex-row`}>
       
       <ButtonIcon onclick={()=>{
-        setIsScreenShare(!isScreenShare)
-      }} icon={<MonitorOff size={iconSize}/>} offIcon={<MonitorUp size={iconSize}/>} />
+        setIsScreenShare(prev => !prev);
+      }} icon={<MonitorOff size={iconSize}/>} offIcon={isScreenShare ? <MonitorUp size={iconSize}/> : <MonitorOff size={iconSize}/>} />
 
       <ButtonIcon onclick={()=>{
         setShowChat(prev => !prev)

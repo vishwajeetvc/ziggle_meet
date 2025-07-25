@@ -48,6 +48,8 @@ function Meet() {
   // other peer video when onaddtrack.
   const [isVideoAvailable, setIsVideoAvailable] = useState(false);
 
+  const [showMute, setShowMute] = useState(true);
+
   //this link will visible to right-top(bouncing) to the sender(host).
   const [link, setLink] = useState('');
 
@@ -94,9 +96,10 @@ function Meet() {
         setIsVideoAvailable(data[key])
         break;
       case 'audioOff' : 
+        setShowMute(data[key]);
         console.log(data[key])
         break;
-      case 'callOff' : 
+      case 'callOff' : // drop the call
         //console.log("call off")
         navigate('/')
         break;
@@ -203,9 +206,21 @@ function Meet() {
       myVideo.current.srcObject.getTracks().forEach(track => track.stop());
     }
     if(isScreenShare){
-      localStream.current = await navigator.mediaDevices.getDisplayMedia({video :{ frameRate: { ideal: 10, max: 60 }},  audio : true });
+      try {
+        localStream.current = await navigator.mediaDevices.getDisplayMedia({video :{ frameRate: { ideal: 10, max: 60 }},  audio : true });
+        localStream.current.getVideoTracks()[0].enabled = true
+        if(channel.current.readyState == 'open'){
+          channel.current.send(JSON.stringify({videoOff : true}))
+        }
+      } catch (error) {
+        localStream.current = await navigator.mediaDevices.getUserMedia({video : { frameRate: { ideal: 10, max: 60 }, }, audio :true });
+        setIsScreenShare(false);
+        console.log(error)
+      }
     } else {
-      localStream.current = await navigator.mediaDevices.getUserMedia({video : { frameRate: { ideal: 10, max: 60 }, }, audio :true });
+      if(!isScreenShare){
+        localStream.current = await navigator.mediaDevices.getUserMedia({video : { frameRate: { ideal: 10, max: 60 }, }, audio :true });
+      }
     }
     myVideo.current.srcObject = localStream.current;
 
@@ -241,8 +256,12 @@ function Meet() {
       <div className="border-2 inset-[15px] rounded-xl md:inset-[25px] absolute bg-black z-10 overflow-hidden">
 
         <Videos 
+          showMute={showMute}
           showChat={showChat}
-          myVideo={myVideo} otherVideo={otherVideo} isVideoAvailable={isVideoAvailable} />
+          myVideo={myVideo} 
+          otherVideo={otherVideo} 
+          isVideoAvailable={isVideoAvailable} />
+
         {
           showEmoji && <Emoji emoji={"♥️"}/>
         }

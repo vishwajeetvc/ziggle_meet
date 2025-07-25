@@ -3,18 +3,32 @@ import { useNavigate } from "react-router";
 import { LocalConnectionContext } from "../contexts/localConnectionContext";
 import Line from "../components/Line";
 import {  eye, z } from "../assets/assets";
+import { useEffect } from "react";
+import { useRef } from "react";
 
 function Home() {
   const { setIsHost } = useContext(LocalConnectionContext);
   const [roomId, setRoomId] = useState("");
   const navigate = useNavigate();
+  const timer = useRef(null);
+
+  const [saturate, setSaturate] = useState(1);
+
+  useEffect(()=>{
+    timer.current = setInterval( () => {
+      setSaturate(prev => prev == 1 ? setSaturate(2) : setSaturate(1))
+    },1000)
+    return ()=> clearInterval(timer.current);
+  },[])
 
   return (
     <div className="font-[merienda] max-w-full text-xl font-bold text-cyan-400 p-[50px] bg-black min-h-screen border-2 overflow-hidden">
       <div
         style={{
           backgroundImage : `url(${eye})`,
-          backgroundRepeat : 'no-repeat'
+          backgroundRepeat : 'no-repeat',
+          transition : 'all 2s',
+          filter : `saturate(${saturate})`
         }}
         className="border inset-[25px] bg-size-[500px] bg-center md:bg-right md:bg-size-[800px] 2xl:bg-size-[1400px] rounded md:inset-[50px] shadow-lg shadow-cyan-400/40 absolute p-[20px] md:p-[100px] bg-black z-10 overflow-hidden">
         <div className="py-8 mt-[10%]">
