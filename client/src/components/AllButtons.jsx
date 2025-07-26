@@ -10,7 +10,16 @@ import {
 import ButtonIcon from "../components/ButtonIcon";
 
 
-export default function AllButtons({setIsScreenShare, isScreenShare, lc, localStream, channel, setShowChat, navigate}){
+export default function AllButtons({
+  setIsScreenShare, 
+  isScreenShare, lc,
+  localStream, 
+  channel, 
+  setShowChat, 
+  navigate, 
+  setIsMyVideoOff,
+  isMyVideoOff
+  }){
 
   const iconSize = window.innerWidth < 600 ? 16 : 28; 
 
@@ -19,6 +28,9 @@ export default function AllButtons({setIsScreenShare, isScreenShare, lc, localSt
       
       <ButtonIcon onclick={()=>{
         setIsScreenShare(prev => !prev);
+        if(channel.current?.readyState == 'open'){
+          channel.current.send(JSON.stringify({videoOff : isMyVideoOff}))
+        }
       }} icon={<MonitorOff size={iconSize}/>} offIcon={isScreenShare ? <MonitorUp size={iconSize}/> : <MonitorOff size={iconSize}/>} />
 
       <ButtonIcon onclick={()=>{
@@ -33,16 +45,18 @@ export default function AllButtons({setIsScreenShare, isScreenShare, lc, localSt
         navigate('/')
       }} icon={<PhoneOff color={'red'} size={iconSize}/>} />
 
-      <ButtonIcon onclick={()=>{
-        // you disable video the browser stop sending video to the rtcPeerConnection;
-        const video = localStream.current.getVideoTracks()[0]
-        video.enabled = !video.enabled;
-
-        // send the local pause/play info to the other peer after(click) connection open on both side.
-        if(channel.current.readyState == 'open'){
-          channel.current.send(JSON.stringify({videoOff : video.enabled}))
-        }
-      }} icon={<Video size={iconSize}/>} offIcon={<VideoOff size={iconSize}/>}/>
+      { !isScreenShare &&
+        <ButtonIcon onclick={()=>{
+          // you disable video the browser stop sending video to the rtcPeerConnection;
+          const video = localStream.current.getVideoTracks()[0]
+          video.enabled = !video.enabled;
+          setIsMyVideoOff(video.enabled)
+          // send the local pause/play info to the other peer after(click) connection open on both side.
+          if(channel.current.readyState == 'open'){
+            channel.current.send(JSON.stringify({videoOff : video.enabled}))
+          }
+        }} icon={<VideoOff size={iconSize}/>} offIcon={<Video size={iconSize}/>}/>
+      } 
 
       
       <ButtonIcon onclick={()=>{

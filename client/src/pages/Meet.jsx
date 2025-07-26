@@ -50,6 +50,9 @@ function Meet() {
 
   const [showMute, setShowMute] = useState(true);
 
+  // used when you your screen off, to know is your video (userMedia) is visible or not
+  const [isMyVideoOff, setIsMyVideoOff] = useState(false);
+
   //this link will visible to right-top(bouncing) to the sender(host).
   const [link, setLink] = useState('');
 
@@ -128,6 +131,11 @@ function Meet() {
     myVideo.current.onloadedmetadata = ()=> myVideo.current.play()
     myVideoSrcRef.current = myVideo.current.srcObject;
 
+    const video = localStream.current.getVideoTracks()[0]
+    video.enabled = isMyVideoOff;
+    
+    console.log('meeting')
+
     // add userMedia to the localConnection.
     localStream.current.getTracks().forEach( track => {
       sender.current.push(lc.current.addTrack(track, localStream.current));
@@ -205,6 +213,7 @@ function Meet() {
     if (myVideo.current.srcObject) {
       myVideo.current.srcObject.getTracks().forEach(track => track.stop());
     }
+
     if(isScreenShare){
       try {
         localStream.current = await navigator.mediaDevices.getDisplayMedia({video :{ frameRate: { ideal: 10, max: 60 }},  audio : true });
@@ -213,16 +222,21 @@ function Meet() {
           channel.current.send(JSON.stringify({videoOff : true}))
         }
       } catch (error) {
-        localStream.current = await navigator.mediaDevices.getUserMedia({video : { frameRate: { ideal: 10, max: 60 }, }, audio :true });
         setIsScreenShare(false);
-        console.log(error)
       }
     } else {
       if(!isScreenShare){
         localStream.current = await navigator.mediaDevices.getUserMedia({video : { frameRate: { ideal: 10, max: 60 }, }, audio :true });
+        const video = localStream.current.getVideoTracks()[0]
+        video.enabled = isMyVideoOff;
       }
     }
     myVideo.current.srcObject = localStream.current;
+
+    const video = localStream.current.getVideoTracks()[0]
+    lc.current.addEventListener('datachannel', (e) => {
+      e.channel.send(JSON.stringify({videoOff : isMyVideoOff}))
+    })
 
     const videoTrack = localStream.current.getVideoTracks()[0];
     // sender is rtcrtp transport 
@@ -256,6 +270,7 @@ function Meet() {
       <div className="border-2 inset-[15px] rounded-xl md:inset-[25px] absolute bg-black z-10 overflow-hidden">
 
         <Videos 
+          isMyVideoOff={isMyVideoOff}
           showMute={showMute}
           showChat={showChat}
           myVideo={myVideo} 
@@ -276,6 +291,8 @@ function Meet() {
             />
         }
         <AllButtons
+          isMyVideoOff={isMyVideoOff}
+          setIsMyVideoOff={setIsMyVideoOff}
           navigate={navigate}
           setShowChat={setShowChat}
           channel={channel}

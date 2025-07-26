@@ -2,8 +2,9 @@ import { useRef } from "react"
 import { call } from "../assets/assets"
 import { useEffect } from "react";
 import { MicOff } from "lucide-react";
+import { VideoOff } from "lucide-react";
 
-export default function Videos({myVideo, otherVideo, isVideoAvailable, showMute}){
+export default function Videos({myVideo, otherVideo, isVideoAvailable, showMute, isMyVideoOff}){
 
   const muteRef = useRef(null);
 
@@ -25,6 +26,9 @@ export default function Videos({myVideo, otherVideo, isVideoAvailable, showMute}
         style={{ objectFit: 'cover', overflowClipMargin : '' }}
         className={`absolute top-0 rounded-xl left-0 md:w-full  border-cyan-400 border z-1 h-[200px] w-[500px] overflow-hidden [overflow-clip-margin:0px]`} 
        ref={myVideo}/>
+        { !isMyVideoOff && <div className="absolute z-1 top-18  left-[50%] translate-x-[-50%]">
+          <VideoOff color={"cyan"} size={50}/>
+        </div>}
     </div>
 
     <div>
