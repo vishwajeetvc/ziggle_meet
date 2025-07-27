@@ -38,7 +38,6 @@ export default function AllButtons({
       }} offIcon={<MessageSquareMore size={iconSize}/>} icon={<MessageSquareOff size={iconSize} />} />
 
       <ButtonIcon onclick={()=>{
-
         if(channel.current.readyState == 'open'){
           channel.current.send(JSON.stringify({callOff : true}))
         }
