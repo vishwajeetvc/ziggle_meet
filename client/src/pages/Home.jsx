@@ -12,7 +12,7 @@ function Home() {
   const navigate = useNavigate();
 
   const getData = async () => {
-    const resp = await fetch('http://localhost:3000', {
+    const resp = await fetch('http://localhost:3000/user', {
       credentials : 'include'
     });
     const data = await resp.json()

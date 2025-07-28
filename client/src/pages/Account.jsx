@@ -35,14 +35,24 @@ function LoginSignupForm() {
     return '';
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationError = validate();
     if (validationError) return setError(validationError);
     setError('');
 
     if (isSignup) {
-      console.log('Sign up with', formData);
+      const resp = await fetch('http://localhost:3000/user', {
+        method:'POST',
+        headers : {
+          'content-type' : 'application/json'
+        },
+        body : JSON.stringify(formData),
+        credentials : 'include'
+      })
+      const data = await resp.json();
+      console.log(data)
+      //console.log('Sign up with', formData);
     } else {
       console.log('Login with', formData);
     }

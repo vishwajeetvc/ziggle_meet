@@ -7,6 +7,7 @@ import { handleCookie } from './middleWares/handleCookie.js';
 import { connectToDB } from './configs/dbConnection.js';
 import cors  from 'cors'
 import dotenv from 'dotenv'
+import userRoute from './controllers/userRoute.js';
 
 dotenv.config();
 
@@ -17,20 +18,21 @@ await connectToDB(`mongodb://${process.env.DBUSER}:${process.env.DBPASS}@localho
 
 export const io = new Server(server, {
   cors: {
-    origin: '*', 
+    origin: 'http://localhost:5173', 
     methods: ['GET', 'POST'],
   },
 });
 
-//app.use(express.static('./public'))
 io.on('connection', socket);
-app.use(cors({ origin : "*" }))
+app.use(cors({ origin : "http://localhost:5173", credentials : true }))
 app.use(cookieParser('secret'));
+app.use(express.json());
 app.use(handleCookie);
 
-app.get('/',(req, res)=>{
-  res.json({hi : "hi"})
-})
+
+//app.use(express.static('./public'))
+
+app.use('/user', userRoute);
 
 server.listen(3000, ()=>{
   console.log("Running on 3000");
