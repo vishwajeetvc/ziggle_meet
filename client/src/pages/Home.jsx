@@ -11,18 +11,6 @@ function Home() {
   const [roomId, setRoomId] = useState("");
   const navigate = useNavigate();
 
-  const getData = async () => {
-    const resp = await fetch('http://localhost:3000/user', {
-      credentials : 'include'
-    });
-    const data = await resp.json()
-    console.log(data)
-  }
-
-  useEffect(()=>{
-    getData();
-  },[])
-
   return (
     <Screen>
       <div className="absolute top-0 right-0 px-5 py-2 m-2 group ">

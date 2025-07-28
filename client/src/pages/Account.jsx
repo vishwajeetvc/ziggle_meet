@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Screen from "../components/Screen"
+import { useNavigate } from "react-router";
+
 
 function Account() {
   return (
@@ -13,18 +15,15 @@ export default Account
 
 
 function LoginSignupForm() {
+  const navigate = useNavigate();
   const [isSignup, setIsSignup] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
+  const [done, setDone] = useState('');
 
   const handleChange = (e) => {
     setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
+      ...prev, [e.target.name]: e.target.value
     }));
   };
 
@@ -35,26 +34,54 @@ function LoginSignupForm() {
     return '';
   };
 
-  const handleSubmit = async (e) => {
+  const handleSignUp = async () => {
+    const resp = await fetch('http://localhost:3000/user/signup', {
+      method:'POST',
+      headers : { 'content-type' : 'application/json' },
+      body : JSON.stringify(formData),
+      credentials : 'include'
+    })
+    const data = await resp.json();
+    if(!Object.keys(data).includes('error')){
+      setFormData({ name: '', email: '', password: '' })
+      setDone("Successfull");
+      setTimeout(()=>{
+        navigate('/')
+      },2000)
+    } else {
+      return setError(data.error);
+    }
+  }
+
+  const handleLogin = async ()=>{
+    const resp = await fetch('http://localhost:3000/user/login', {
+      method:'POST',
+      headers : { 'content-type' : 'application/json' },
+      body : JSON.stringify(formData),
+      credentials : 'include'
+    })
+    const data = await resp.json();
+    if(!Object.keys(data).includes('error')){
+      setFormData({ email: '', password: '' })
+      setDone("Successfull");
+      setTimeout(()=>{
+        navigate('/')
+      },2000)
+    } else {
+      return setError(data.error);
+    }
+  }
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     const validationError = validate();
     if (validationError) return setError(validationError);
     setError('');
 
     if (isSignup) {
-      const resp = await fetch('http://localhost:3000/user', {
-        method:'POST',
-        headers : {
-          'content-type' : 'application/json'
-        },
-        body : JSON.stringify(formData),
-        credentials : 'include'
-      })
-      const data = await resp.json();
-      console.log(data)
-      //console.log('Sign up with', formData);
+      handleSignUp();
     } else {
-      console.log('Login with', formData);
+      handleLogin();
     }
   };
 
@@ -99,6 +126,7 @@ function LoginSignupForm() {
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
+          {done && <p className="text-green-500 text-sm">{done}</p>}
 
           <button
             type="submit"

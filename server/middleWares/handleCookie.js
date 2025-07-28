@@ -1,6 +1,7 @@
 import { Guest } from "../models/guest.js";
 
 export const handleCookie = async (req, res, next) =>{
+
   if(!req.signedCookies.sid){
     const user = await Guest.insertOne({
       history : [{}]
