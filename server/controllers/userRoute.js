@@ -27,6 +27,7 @@ userRoute.post('/login', async (req, res)=>{
 userRoute.post('/signup', async (req, res)=>{
   try {
     const hash = await bcrypt.hash(req.body.password, 10);
+    console.log(req.body);
     await User.insertOne({...req.body,password : hash, history :[]});
     res.status(200).json({message : 'Sign is successfull'});
   } catch (error) {

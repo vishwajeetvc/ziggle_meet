@@ -248,7 +248,7 @@ function Meet() {
     if(!roomId && !isHost) {
       navigate('/')
     };
-  })
+  },[])
 
   useEffect(()=>{
     startMeeting();
@@ -258,7 +258,6 @@ function Meet() {
   useEffect(()=>{
     toggleShareScreen();
   },[isScreenShare])
-
 
   return (
     <div className={`

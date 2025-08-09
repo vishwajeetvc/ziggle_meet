@@ -22,7 +22,7 @@ function Home() {
           <li>LogOut</li>
         </ul>
       </div>
-      <div className="py-8 mt-[10%]">
+      <div className="py-8 mt-[5%] xl:mt-[10%]">
         <div 
           style={{
             backgroundImage : `url(${z})`,
