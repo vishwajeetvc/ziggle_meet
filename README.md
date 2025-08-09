@@ -20,7 +20,7 @@ This project enables two users to connect seamlessly, share video/audio, exchang
 
 | Home | Dial Screen | Active Call | Chat | Screen Sharing |
 |------|-------------|-------------|------|----------------|
-| ![Home](home.png) | ![Dial](DialScreen.png) | ![Active Call](call.png) | ![Chat](chat.png) | ![Screen Sharing](src.png) |
+| ![Home](home.png) | ![Dial](DialScreen.png) | ![Active Call](call.png) | ![Chat](chat.png) | ![Screen Sharing](scr.png) |
 
 ---
 
