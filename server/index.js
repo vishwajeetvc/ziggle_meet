@@ -20,7 +20,7 @@ app.use(cors({ origin : "*", credentials : true }))
 app.use(cookieParser('secret'));
 app.use(express.json());
 
-server.listen(3000, ()=>{
+server.listen(3001, ()=>{
   console.log("Running on 3000");
 })
 
