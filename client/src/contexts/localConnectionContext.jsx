@@ -12,7 +12,7 @@ export default function LCProvider({children}){
   const [isHost, setIsHost]  = useState(false);
 
   useEffect( ()=> {
-    socket.current = io("192.168.1.54:3000");
+    socket.current = io("https://ziggle-meet.onrender.com");
 
     socket.current.on('welcome', (data)=>{
       console.log(data)
