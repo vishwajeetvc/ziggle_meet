@@ -9,10 +9,21 @@ import Screen from "../components/Screen";
 function Home() {
   const { setIsHost } = useContext(LocalConnectionContext);
   const [roomId, setRoomId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    fetch('https://ziggle-meet.onrender.com/health')
+      .then(resp => resp.text())
+      .then(() => setIsLoading(true))
+      .catch(() => {
+        alert("something went wrong")
+      })
+  },[])
 
   return (
     <Screen>
+      {isLoading && <ServerStartingLoader/>}
       <div className="absolute top-0 right-0 px-5 py-2 m-2 group ">
         <Link to={"/account"}>
           <CircleUserRound size={32} />
@@ -61,4 +72,21 @@ function Home() {
 
 export default Home
 
+function ServerStartingLoader() {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/30">
+      <div className="flex flex-col items-center gap-6 p-8 bg-white/80 rounded-2xl shadow-xl">
+        
+        {/* Spinner */}
+        <div className="w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+
+        {/* Text */}
+        <p className="text-lg font-semibold text-gray-800 text-center">
+          Please wait, server is starting, It may take 30 seconds please wait!.
+        </p>
+
+      </div>
+    </div>
+  );
+}
 

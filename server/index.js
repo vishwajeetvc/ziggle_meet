@@ -20,6 +20,10 @@ app.use(cors({ origin : "*", credentials : true }))
 app.use(cookieParser('secret'));
 app.use(express.json());
 
+app.get('/health', (req, res)=>{
+  res.end("Server is starting! May take 30 seconds.")
+})
+
 server.listen(3001, ()=>{
   console.log("Running on 3000");
 })

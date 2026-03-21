@@ -46,12 +46,12 @@ function Meet() {
   const [isScreenShare, setIsScreenShare] = useState(false);
 
   // other peer video when onaddtrack.
-  const [isVideoAvailable, setIsVideoAvailable] = useState(false);
+  const [isVideoAvailable, setIsVideoAvailable] = useState(true);
 
   const [showMute, setShowMute] = useState(true);
 
   // used when you your screen off, to know is your video (userMedia) is visible or not
-  const [isMyVideoOff, setIsMyVideoOff] = useState(false);
+  const [isMyVideoOff, setIsMyVideoOff] = useState(true);
 
   //this link will visible to right-top(bouncing) to the sender(host).
   const [link, setLink] = useState('');
@@ -170,7 +170,7 @@ function Meet() {
       }
 
       socket.current.on('meet-id', ( roomId ) =>{
-        setLink(`http://localhost:5173/roomNo/${roomId}`)
+        setLink(`${roomId}`)
       })
       socket.current.on('answer', (answer, p) => {
         pid.current = p;
@@ -226,7 +226,13 @@ function Meet() {
       }
     } else {
       if(!isScreenShare){
-        localStream.current = await navigator.mediaDevices.getUserMedia({video : { frameRate: { ideal: 10, max: 60 }, }, audio :true });
+        localStream.current = await navigator.mediaDevices.getUserMedia({
+          video : { 
+            frameRate: 
+            { ideal: 10, max: 15 }, 
+          } , 
+          audio :true 
+        });
         const video = localStream.current.getVideoTracks()[0]
         video.enabled = isMyVideoOff;
       }
@@ -262,7 +268,7 @@ function Meet() {
   return (
     <div className={`
           bg-gradient-to-r from-black via-cyan-500 to-black 
-          font-[merienda] max-w-full text-xl font-bold text-cyan-400 p-[50px] min-h-screen md:border-1 overflow-hidden`}>
+           max-w-full text-xl font-bold text-cyan-400 p-[50px] min-h-screen md:border-1 overflow-hidden`}>
 
       { !isVideoAvailable && <audio controls autoPlay src={music}></audio>}
 
