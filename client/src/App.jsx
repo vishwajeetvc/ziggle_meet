@@ -6,14 +6,14 @@ import Account from './pages/Account'
 import { lazy, Suspense } from 'react'
 import Screen from './components/Screen'
 
-//const Meet = lazy(wait(3000).then(()=>import('./pages/Meet')))
-const Meet = lazy(()=> import('./pages/Meet'))
+// const Meet = lazy(wait(3000).then(() => import('./pages/Meet')))
+const Meet = lazy(() => import('./pages/Meet'))
 
-function wait(time){
+function wait(time) {
   return new Promise(res => {
-    setTimeout(()=>{
+    setTimeout(() => {
       res()
-    },time)
+    }, time)
   })
 }
 
@@ -21,16 +21,16 @@ function App() {
   return (
     <LCProvider>
       <BrowserRouter>
-        <Suspense fallback={<Screen/>}>
+        <Suspense fallback={<Screen />}>
           <Routes>
-            <Route path="/" element={<Home/>}/>
+            <Route path="/" element={<Home />} />
             <Route path="/roomNo/:roomId?" element={
-                <Suspense fallback={<Screen></Screen>}>
-                  <Meet />
-                </Suspense>
-              }
+              <Suspense fallback={<Screen></Screen>}>
+                <Meet />
+              </Suspense>
+            }
             />
-            <Route path="/account" element={<Account/>}/>
+            <Route path="/account" element={<Account />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
